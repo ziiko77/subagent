@@ -1,0 +1,25 @@
+{
+  "commands": {
+    "review": {
+      "description": "코드 리뷰어 에이전트 호출 - 코드, PR, 커밋, 변경사항 리뷰",
+      "frontmatter": {
+        "agents": ["code-reviewer"]
+      },
+      "prompt": "$ARGUMENTS"
+    },
+    "fix": {
+      "description": "버그 픽서 에이전트 호출 - 버그 찾기, 수정, 디버깅",
+      "frontmatter": {
+        "agents": ["bug-fixer"]
+      },
+      "prompt": "$ARGUMENTS"
+    },
+    "validate": {
+      "description": "비즈니스 로직 검증 에이전트 호출 - 요구사항, 데이터 흐름, 비즈니스 규칙 검증",
+      "frontmatter": {
+        "agents": ["business-logic-validator"]
+      },
+      "prompt": "$ARGUMENTS"
+    }
+  }
+}
