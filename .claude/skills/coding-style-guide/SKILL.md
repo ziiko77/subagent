@@ -1,8 +1,7 @@
 ---
 name: coding-style-guide
-description: Sirloin OMS coding style guide and conventions. Clean code principles, declarative naming, component patterns, function expressions, custom hooks abstraction, type safety, and file organization rules.
+description: "컨벤션 적용", "코드 리뷰", "분석" 요청 시 사용. Sirloin OMS coding style guide and conventions. Clean code principles, declarative naming, component patterns, function expressions, custom hooks abstraction, type safety, and file organization rules.
 allowed-tools: Read, Grep, Glob, Edit, Write
-model: inherit
 ---
 
 # Coding Style Guide
@@ -16,6 +15,7 @@ Sirloin OMS 프로젝트의 코드 스타일 가이드입니다. 모든 코드�
 모든 코드는 클린 코드 원칙을 기반으로 작성합니다.
 
 ### 핵심 원칙
+
 - **가독성**: 코드는 읽기 쉬워야 함
 - **단순성**: 복잡한 것보다 단순한 것을 선호
 - **명확성**: 의도가 명확하게 드러나야 함
@@ -84,18 +84,21 @@ const formatOrderDate = () => string;   // string 반환
 ### 네이밍 패턴
 
 **불리언 반환**:
+
 - `is~`: 상태 확인 (`isLoading`, `isValid`)
 - `has~`: 소유 확인 (`hasPermission`, `hasError`)
 - `should~`: 조건 확인 (`shouldRefetch`, `shouldRender`)
 - `can~`: 가능 여부 (`canEdit`, `canDelete`)
 
 **데이터 반환**:
+
 - `get~`: 데이터 조회 (`getUser`, `getOrderList`)
 - `fetch~`: 비동기 데이터 가져오기 (`fetchOrders`)
 - `calculate~`: 계산 (`calculateTotal`, `calculateDiscount`)
 - `format~`: 포맷팅 (`formatDate`, `formatPrice`)
 
 **동작 수행**:
+
 - `handle~`: 이벤트 핸들러 (`handleSubmit`, `handleClick`)
 - `on~`: 콜백 함수 (`onComplete`, `onError`)
 - `create~`: 생성 (`createOrder`)
@@ -148,6 +151,7 @@ export default function OrderPage() {
 ```
 
 **이유**:
+
 - **일반 컴포넌트**: Named export로 일관성 유지, 리팩토링 시 추적 용이
 - **페이지 컴포넌트**: 라우팅 시스템(React Router, Next.js 등)과의 호환성
 
@@ -176,6 +180,7 @@ export const calculateDiscount = (price: number, rate: number): number => {
 ```
 
 **이유**:
+
 - 함수의 스코프가 명확
 - 호이스팅 방지로 예측 가능한 동작
 - 컴포넌트와 구분 명확
@@ -196,11 +201,7 @@ export function OrderList() {
     </div>
   );
 
-  return (
-    <div>
-      {orders.map(renderOrderItem)}
-    </div>
-  );
+  return <div>{orders.map(renderOrderItem)}</div>;
 }
 
 // ✅ 좋은 예: 별도 컴포넌트로 분리
@@ -225,6 +226,7 @@ export function OrderList() {
 ```
 
 **이유**:
+
 - 컴포넌트로 만들면 React DevTools에서 추적 가능
 - 재사용성 향상
 - 테스트 용이
@@ -239,12 +241,12 @@ export function OrderList() {
 // ❌ 나쁜 예: 너무 많은 관심사
 interface OrderCardProps {
   order: Order;
-  user: User;              // OrderCard는 user 전체가 필요 없음
+  user: User; // OrderCard는 user 전체가 필요 없음
   permissions: Permission; // 권한 체크는 다른 곳에서
   onEdit: () => void;
   onDelete: () => void;
   onShare: () => void;
-  theme: Theme;            // 테마는 컨텍스트에서
+  theme: Theme; // 테마는 컨텍스트에서
 }
 
 // ✅ 좋은 예: 필요한 것만
@@ -266,6 +268,7 @@ export function OrderCard({ order, onEdit, onDelete }: OrderCardProps) {
 ```
 
 **원칙**:
+
 - 컴포넌트가 실제로 사용하는 데이터만 전달
 - 불필요한 의존성 제거
 - Props drilling 최소화
@@ -379,6 +382,7 @@ const response: Order = await fetchOrder();
 ```
 
 **불가피한 경우**:
+
 - 외부 라이브러리 타입이 없는 경우 → `unknown` 사용 후 타입 가드
 - 동적 타입이 필요한 경우 → 제네릭 사용
 
@@ -435,6 +439,7 @@ src/
 ```
 
 **이유**:
+
 - import 경로 간결화
 - 폴더 내부 구조 변경 시 외부 코드 영향 최소화
 - 명확한 public API
@@ -478,6 +483,7 @@ export function OrderForm() {
 ```
 
 **이유**:
+
 - `OrderFormData`, `validateOrderForm`, `DEFAULT_ORDER_FORM`은 `OrderForm`에서만 사용
 - 높은 응집도 유지
 - 관련 코드가 한 곳에 모여 있어 이해하기 쉬움
@@ -505,6 +511,7 @@ import { isValidEmail } from '@/utils/validation';
 ### 분리 전략
 
 **1. 컴포넌트 분리**:
+
 ```typescript
 // Before: LargeComponent.tsx (700줄)
 export function LargeComponent() {
@@ -529,6 +536,7 @@ export function LargeComponent() {
 ```
 
 **2. 로직 분리**:
+
 ```typescript
 // Before: OrderPage.tsx (600줄)
 export function OrderPage() {
@@ -554,6 +562,7 @@ export function OrderPage() {
 ```
 
 **3. 유틸 분리**:
+
 ```typescript
 // utils/orderUtils.ts
 export const formatOrderStatus = ...
@@ -650,11 +659,13 @@ export function OrderCard({ order, onEdit, onDelete }: OrderCardProps) {
 ```
 
 **응집도 체크리스트**:
+
 - [ ] 관련된 데이터와 함수가 같은 파일에 있는가?
 - [ ] 파일의 모든 코드가 하나의 목적을 위해 동작하는가?
 - [ ] 파일명이 내용을 정확히 표현하는가?
 
 **결합도 체크리스트**:
+
 - [ ] 컴포넌트가 필요한 것만 Props로 받는가?
 - [ ] 전역 상태 의존성이 최소화되었는가?
 - [ ] 다른 모듈 변경 시 영향이 적은가?
@@ -755,16 +766,19 @@ function OrderDetail() {
 ### Context 사용 가이드라인
 
 **Context 사용이 적합한 경우**:
+
 - Props depth가 4단계 이상
 - 여러 컴포넌트에서 같은 데이터 필요
 - 특정 영역(feature)에서만 사용되는 상태
 
 **Context 사용을 피해야 하는 경우**:
+
 - Props depth가 3단계 이하 (Props로 전달)
 - 단일 컴포넌트에서만 사용 (로컬 state)
 - 전역적으로 사용 (전역 상태 관리 라이브러리)
 
 **지역화 원칙**:
+
 ```
 전역 상태 관리 (Recoil)
     ↓
@@ -874,7 +888,7 @@ export function OrderCard({
   order,
   onEdit,
   onDelete,
-  showActions = true,  // 기본값
+  showActions = true, // 기본값
   variant = 'default', // 기본값
 }: OrderCardProps) {
   return (
@@ -899,7 +913,7 @@ export function Button({ variant, size, ...restProps }: ButtonProps) {
   return (
     <button
       className={`btn-${variant} btn-${size}`}
-      {...restProps}  // onClick, disabled 등 나머지 props 전달
+      {...restProps} // onClick, disabled 등 나머지 props 전달
     />
   );
 }
@@ -908,12 +922,14 @@ export function Button({ variant, size, ...restProps }: ButtonProps) {
 ### 구조분해 사용 원칙
 
 **사용해야 하는 경우**:
+
 - Props 받을 때
 - 객체/배열에서 값을 추출할 때
 - 함수 파라미터로 객체를 받을 때
 - 여러 값을 반환하는 함수 결과를 받을 때
 
 **사용을 피하는 경우**:
+
 - 한 번만 사용되는 깊은 중첩 (가독성 저하)
 - 변수명이 너무 길어지는 경우
 

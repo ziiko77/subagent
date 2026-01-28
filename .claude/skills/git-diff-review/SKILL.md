@@ -1,6 +1,6 @@
 ---
 name: git-diff-review
-description: Git diff and PR review specialist. Analyzes code changes between commits or in pull requests, focusing on frontend quality, security, and performance. Use when reviewing PRs, commits, or code changes.
+description: "리뷰해줘", "분석해줘", "파악해줘" 요청 시 사용. Git diff and PR review specialist. Analyzes code changes between commits or in pull requests, focusing on frontend quality, security, and performance.
 allowed-tools: Bash, Read, Grep, Glob
 model: inherit
 ---
@@ -14,6 +14,7 @@ Git diff와 PR 변경사항을 분석하여 프론트엔드 품질, 보안, 성�
 ## When to Use This Skill
 
 Use this skill when the user requests:
+
 - "Review this PR"
 - "Review my changes"
 - "Review the diff"
@@ -21,6 +22,7 @@ Use this skill when the user requests:
 - "What changed in this PR?"
 
 **DO NOT** use for:
+
 - Reviewing entire files without context of changes
 - General code questions unrelated to diffs
 
@@ -31,6 +33,7 @@ Use this skill when the user requests:
 ### Step 1: Identify Review Type
 
 Determine what needs to be reviewed:
+
 - **PR Review**: GitHub Pull Request
 - **Commit Review**: Specific commit(s)
 - **Working Changes**: Current unstaged/staged changes
@@ -78,6 +81,7 @@ index abc123..def456 100644
 ```
 
 **Key elements to identify:**
+
 - **File path**: `src/components/Example.tsx`
 - **Line numbers**: `@@ -10,7 +10,7 @@`
 - **Removed lines**: Lines starting with `-`
@@ -89,19 +93,23 @@ index abc123..def456 100644
 For each changed file, check against these criteria:
 
 #### Frontend Quality
+
 - [ ] **React Best Practices**
+
   - Proper hook usage (useState, useEffect, useMemo, useCallback)
   - Correct dependency arrays
   - No unnecessary re-renders
   - Component composition over prop drilling
 
 - [ ] **TypeScript Type Safety**
+
   - No `any` types added
   - Proper type definitions
   - Generic types used correctly
   - Type narrowing and guards
 
 - [ ] **Apollo Client / GraphQL** (if applicable)
+
   - Query/mutation patterns correct
   - Cache updates handled properly
   - Error handling present
@@ -113,7 +121,9 @@ For each changed file, check against these criteria:
   - Proper state scope
 
 #### Code Quality
+
 - [ ] **Readability**
+
   - Clear variable/function names
   - No magic numbers (use named constants)
   - Complex logic abstracted
@@ -126,7 +136,9 @@ For each changed file, check against these criteria:
   - Proper error handling
 
 #### Performance
+
 - [ ] **React Performance**
+
   - useMemo/useCallback used appropriately
   - No expensive operations in render
   - Lazy loading for heavy components
@@ -138,7 +150,9 @@ For each changed file, check against these criteria:
   - Code splitting considered for large features
 
 #### Security
+
 - [ ] **Input Validation**
+
   - User input validated (Yup schemas)
   - XSS prevention (proper escaping)
   - No eval() or dangerous patterns
@@ -149,7 +163,9 @@ For each changed file, check against these criteria:
   - No secrets in code
 
 #### Accessibility
+
 - [ ] **Semantic HTML**
+
   - Proper heading hierarchy
   - Alt text for images
   - ARIA labels where needed
@@ -159,7 +175,9 @@ For each changed file, check against these criteria:
   - Logical tab order
 
 #### MUI & Styling
+
 - [ ] **MUI Patterns**
+
   - Consistent sx prop usage
   - Theme values used (not hardcoded colors)
   - Responsive design considered
@@ -172,7 +190,7 @@ For each changed file, check against these criteria:
 
 Format the review in a clear, actionable structure:
 
-```markdown
+````markdown
 ## 📊 Review Summary
 
 **Review Type**: [PR / Commit / Working Changes]
@@ -192,11 +210,15 @@ Format the review in a clear, actionable structure:
 ## ✅ Good Changes
 
 ### src/components/order/OrderList.tsx:45
+
 ```diff
 - {items && <List items={items} />}
 + {items?.length > 0 && <List items={items} />}
 ```
+````
+
 ✅ **Improvement**: Added proper array length check with optional chaining
+
 - Handles undefined/null safely
 - Prevents rendering with empty array
 - Follows project patterns
@@ -206,20 +228,24 @@ Format the review in a clear, actionable structure:
 ## ⚠️ Issues Found
 
 ### src/hooks/useOrder.ts:23
+
 ```diff
 + const data: any = await fetchOrder()
 ```
+
 ⚠️ **Type Safety Issue**: Using `any` type
+
 - **Problem**: Loses type safety
 - **Impact**: Runtime errors possible
 - **Fix**: Define proper interface
+
 ```typescript
 interface Order {
   id: string;
   items: OrderItem[];
   total: number;
 }
-const data: Order = await fetchOrder()
+const data: Order = await fetchOrder();
 ```
 
 ---
@@ -239,10 +265,12 @@ const data: Order = await fetchOrder()
 **Summary**: [1-2 sentence overall evaluation]
 
 **Action Items**:
+
 - [ ] Fix type safety issue in useOrder.ts
 - [ ] Add unit tests
 - [ ] Update documentation
-```
+
+````
 
 ---
 
@@ -269,9 +297,10 @@ gh pr review {number} --request-changes --body "Issues found"
 gh pr review {number} \
   --comment \
   --body-file review.md
-```
+````
 
 **Interactive Options**:
+
 1. **View Only**: Display review in chat (default)
 2. **Post Comment**: Add comment to PR
 3. **Submit Review**: Approve/Request Changes/Comment
@@ -283,6 +312,7 @@ gh pr review {number} \
 ### Always Check
 
 **GraphQL Changes**:
+
 ```bash
 # If .graphql files changed
 git diff origin/develop...HEAD -- "*.graphql"
@@ -292,6 +322,7 @@ echo "⚠️ GraphQL changed - run: yarn codegen"
 ```
 
 **Recoil State**:
+
 ```bash
 # If recoil atoms changed
 git diff origin/develop...HEAD -- "**/recoil/**"
@@ -300,11 +331,13 @@ git diff origin/develop...HEAD -- "**/recoil/**"
 ```
 
 **MUI Components**:
+
 - Consistent sx prop usage
 - Theme values used
 - No hardcoded colors/spacing
 
 **Form Validation**:
+
 - Yup schemas defined
 - Error messages in Korean
 - Proper validation rules
@@ -318,12 +351,14 @@ git diff origin/develop...HEAD -- "**/recoil/**"
 **User Request**: "PR 리뷰해줘"
 
 **Action**:
+
 ```bash
 git diff origin/develop...HEAD --stat
 git diff origin/develop...HEAD
 ```
 
 **Analysis**:
+
 - 3 files changed
 - Added optional chaining
 - Improved type safety
@@ -338,20 +373,24 @@ git diff origin/develop...HEAD
 **User Request**: "최근 커밋 리뷰해줘"
 
 **Action**:
+
 ```bash
 git diff HEAD~1..HEAD
 ```
 
 **Analysis**:
+
 - Added new feature
 - Found: `any` type usage
 - Found: Missing error handling
 
 **Output**:
+
 ```markdown
 ⚠️ Needs Changes
 
 Issues:
+
 1. Type safety: Replace `any` with proper interface
 2. Error handling: Add try-catch in async function
 
@@ -377,21 +416,27 @@ Always structure diff reviews as:
 
 ```markdown
 ## 📊 Review Summary
+
 [Stats and overview]
 
 ## 📁 Changed Files
+
 [List with line counts]
 
 ## ✅ Good Changes
+
 [Positive findings with explanations]
 
 ## ⚠️ Issues Found
+
 [Problems with severity and fixes]
 
 ## 💡 Suggestions
+
 [Optional improvements]
 
 ## 🎯 Overall Assessment
+
 [Status and action items]
 ```
 
@@ -434,6 +479,7 @@ git diff -w origin/develop...HEAD
 5. **Project Alignment**: Sirloin OMS 프로젝트 기준 준수
 
 **Key Principles**:
+
 - Focus on **changes**, not entire files
 - Provide **actionable** feedback
 - Follow **frontend-design-guide** standards
