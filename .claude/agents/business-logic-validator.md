@@ -2,7 +2,6 @@
 name: business-logic-validator
 description: Business logic validation specialist for Sirloin OMS. Ensures features meet requirements, validates data flow, and checks business rule compliance. Use when validating business logic, checking requirements, verifying data operations, or reviewing specifications and feature implementations.
 tools: Read, Grep, Glob, Bash, Edit
-model: sonnet
 skills: frontend-design-guide, graphql-patterns, coding-style-guide
 ---
 
